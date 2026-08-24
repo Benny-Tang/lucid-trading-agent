@@ -1,0 +1,36 @@
+# Lucid — Guardrail Config (PROPOSED DEFAULTS — confirm or adjust before wiring into Risk Manager)
+# All figures are % of paper-account equity unless noted. Paper money only.
+
+position_sizing:
+  max_per_trade_pct: 5          # single position cap
+  max_concurrent_positions: 8   # portfolio-level cap
+  min_per_trade_usd: 100        # skip trades too small to be meaningful on paper
+
+loss_caps:
+  daily_loss_cap_pct: 2         # auto-halt new trades for the rest of the day if breached
+  weekly_loss_cap_pct: 5        # triggers mandatory human review before resuming
+
+valuation_gate:
+  margin_of_safety_required_pct: 20   # price must be >=20% below fair-value estimate
+  method: "trailing P/E vs sector median"  # placeholder — see Open Items in spec
+
+watchlist:
+  universe_size: 25             # fixed, liquid US equities (e.g. S&P 500 subset)
+  refresh_cadence: "weekly"
+  drift_allowed: false          # Risk Manager hard-blocks anything outside this list
+
+human_approval_thresholds:
+  single_trade_pct_over: 5      # any trade sized above this requires manual approval
+  new_positions_per_day_over: 3 # more than this many new opens in a day requires approval
+
+kill_switch:
+  manual_toggle: true
+  auto_trigger_on: "daily_loss_cap_breach"
+  effect: "halts all new order submission; open positions untouched until manual review"
+
+reporting:
+  cadence: "daily"
+  content: "full reasoning trail — approved, blocked, and pending trades, no omissions"
+
+# ---
+# generated 2026-08-24 — numbers are a starting proposal, not locked in
